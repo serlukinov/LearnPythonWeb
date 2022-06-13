@@ -7,7 +7,7 @@ class Track(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.Text, nullable=True)
-    sprint = db.relationship('Sprint', backref='track', lazy=True)
+    sprintes = db.relationship('Sprint', backref='track', lazy=True)
 
     def __repr__(self):
         return '<Track %r>' % self.name
@@ -19,7 +19,7 @@ class Sprint(db.Model):
     track_id = db.Column(db.Integer, db.ForeignKey('track_id'), 
         nullable=False)
     description = db.Column(db.Text, nullable=True)
-    lesson = db.relationship('Lesson', backref='sprint', lazy=True)
+    lessones = db.relationship('Lesson', backref='sprint', lazy=True)
 
     def __repr__(self):
         return '<Sprint %r>' % self.name
@@ -31,7 +31,7 @@ class Lesson(db.Model):
     sprint_id = db.Column(db.Integer, db.ForeignKey('sprint_id'), 
         nullable=False)
     description = db.Column(db.Text, nullable=True)
-    content = db.relationship('Content', backref='lesson', lazy=True)
+    contents = db.relationship('Content', backref='lesson', lazy=True)
 
     def __repr__(self):
         return '<Lesson %r>' % self.name
@@ -57,6 +57,8 @@ class User(db.Model):
     email = db.Column(db.String, nullable=False)
     avatar = db.Column(db.String, nullable=False)
     telegram = db.Column(db.String, nullable=False)
+    progress = db.relationship('Content', secondary=progress, lazy='subquery',
+        backref=db.backref('users', lazy=True))
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -65,5 +67,4 @@ class User(db.Model):
 progress = db.Table('progress',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('content_id', db.Integer, db.ForeignKey('content.id'), primary_key=True),
-    db.Column('track_progress', db.Integer, nullable=False)
 )
