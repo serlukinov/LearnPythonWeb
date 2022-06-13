@@ -7,7 +7,11 @@ class Track(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.Text, nullable=True)
-    sprintes = db.relationship('Sprint', backref='track', lazy=True)
+    sprints = db.relationship(
+        'Sprint', 
+        backref='track', 
+        lazy=True,
+        )
 
     def __repr__(self):
         return '<Track %r>' % self.name
@@ -16,10 +20,17 @@ class Track(db.Model):
 class Sprint(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    track_id = db.Column(db.Integer, db.ForeignKey('track_id'), 
-        nullable=False)
+    track_id = db.Column(
+        db.Integer, 
+        db.ForeignKey('track.id'), 
+        nullable=False,
+        )
     description = db.Column(db.Text, nullable=True)
-    lessones = db.relationship('Lesson', backref='sprint', lazy=True)
+    lessons = db.relationship(
+        'Lesson', 
+        backref='sprint', 
+        lazy=True,
+        )
 
     def __repr__(self):
         return '<Sprint %r>' % self.name
@@ -28,10 +39,17 @@ class Sprint(db.Model):
 class Lesson(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    sprint_id = db.Column(db.Integer, db.ForeignKey('sprint_id'), 
-        nullable=False)
+    sprint_id = db.Column(
+        db.Integer, 
+        db.ForeignKey('sprint.id'), 
+        nullable=False,
+        )
     description = db.Column(db.Text, nullable=True)
-    contents = db.relationship('Content', backref='lesson', lazy=True)
+    contents = db.relationship(
+        'Content', 
+        backref='lesson', 
+        lazy=True,
+        )
 
     def __repr__(self):
         return '<Lesson %r>' % self.name
@@ -40,8 +58,11 @@ class Lesson(db.Model):
 class Content(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String, nullable=False)
-    lesson_id = db.Column(db.Integer, db.ForeignKey('lesson_id'), 
-        nullable=False)
+    lesson_id = db.Column(
+        db.Integer, 
+        db.ForeignKey('lesson.id'), 
+        nullable=False,
+        )
     type = db.Column(db.Integer,  nullable=False)
 
     def __repr__(self):
@@ -57,14 +78,20 @@ class User(db.Model):
     email = db.Column(db.String, nullable=False)
     avatar = db.Column(db.String, nullable=False)
     telegram = db.Column(db.String, nullable=False)
-    progress = db.relationship('Content', secondary=progress, lazy='subquery',
-        backref=db.backref('users', lazy=True))
+    progress = db.relationship(
+        'Content', 
+        secondary=progress, 
+        lazy='subquery',
+        backref=db.backref('users', 
+        lazy=True),
+        )
 
     def __repr__(self):
         return '<User %r>' % self.username
 
 
-progress = db.Table('progress',
+progress = db.Table(
+    'progress',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('content_id', db.Integer, db.ForeignKey('content.id'), primary_key=True),
 )
