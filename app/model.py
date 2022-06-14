@@ -55,6 +55,13 @@ class Lesson(db.Model):
         return '<Lesson %r>' % self.name
 
 
+progress = db.Table(
+    'progress',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('content_id', db.Integer, db.ForeignKey('content.id'), primary_key=True),
+)
+
+
 class Content(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String, nullable=False)
@@ -82,16 +89,9 @@ class User(db.Model):
         'Content', 
         secondary=progress, 
         lazy='subquery',
-        backref=db.backref('users', 
-        lazy=True),
+        backref=db.backref('users', lazy=True),
         )
 
     def __repr__(self):
         return '<User %r>' % self.username
 
-
-progress = db.Table(
-    'progress',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-    db.Column('content_id', db.Integer, db.ForeignKey('content.id'), primary_key=True),
-)
