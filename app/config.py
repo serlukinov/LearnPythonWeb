@@ -2,4 +2,6 @@ import os
 
 basedir=os.path.abspath(os.path.dirname(__file__))
 
-SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, '..', 'app.db')
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, '..', 'app.db')
+FLASK_ADMIN_SWATCH = 'cerulean'
+SECRET_KEY = 'So secret such key'
