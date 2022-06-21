@@ -13,7 +13,7 @@
       <div class="row">
         <div class="btn-group me-2" role="group" aria-label="Second group">
           {% for track in tracks %}
-            <button type="button" class="btn btn-secondary">{{ track.name }}</button>
+            <button href="{{ url_for('track', pk=track.id) }}" type="button" class="btn btn-secondary">{{ track.name }}</button>
           {% endfor %}
         </div>
       </div>
