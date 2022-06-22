@@ -10,8 +10,8 @@ class Track(db.Model):
     sprints = db.relationship(
         'Sprint', 
         backref='track', 
-        lazy=True,
-        )
+        lazy='dynamic',
+    )
 
     def __repr__(self):
         return '<Track %r>' % self.name
@@ -24,13 +24,13 @@ class Sprint(db.Model):
         db.Integer, 
         db.ForeignKey('track.id'), 
         nullable=False,
-        )
+    )
     description = db.Column(db.Text, nullable=True)
     lessons = db.relationship(
         'Lesson', 
         backref='sprint', 
-        lazy=True,
-        )
+        lazy='dynamic',
+    )
 
     def __repr__(self):
         return '<Sprint %r>' % self.name
@@ -43,13 +43,13 @@ class Lesson(db.Model):
         db.Integer, 
         db.ForeignKey('sprint.id'), 
         nullable=False,
-        )
+    )
     description = db.Column(db.Text, nullable=True)
     contents = db.relationship(
         'Content', 
         backref='lesson', 
         lazy=True,
-        )
+    )
 
     def __repr__(self):
         return '<Lesson %r>' % self.name
@@ -69,7 +69,7 @@ class Content(db.Model):
         db.Integer, 
         db.ForeignKey('lesson.id'), 
         nullable=False,
-        )
+    )
     type = db.Column(db.Integer,  nullable=False)
 
     def __repr__(self):
@@ -90,7 +90,7 @@ class User(db.Model):
         secondary=progress, 
         lazy='subquery',
         backref=db.backref('users', lazy=True),
-        )
+    )
 
     def __repr__(self):
         return '<User %r>' % self.username

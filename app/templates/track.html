@@ -13,33 +13,26 @@
       <div class="row">
         <div class="btn-group me-2" role="group" aria-label="Second group">
           {% for track in tracks %}
-            <a href="{{ url_for('track', pk=track.id) }}" 
-              class="btn btn-secondary {% if track.id == current_lesson.sprint.track.id %}
-              active disabled{% endif %}">{{ track.name }}</a>
+            <button href="{{ url_for('track', pk=track.id) }}" type="button" class="btn btn-secondary">{{ track.name }}</button>
           {% endfor %}
         </div>
       </div>
       <div class="row">
         <div class="col-4">
           <div class="accordion" id="accordionPanelsStayOpenExample">
-            {% for sprint in current_lesson.sprint.track.sprints %}
+            {% for sprint in sprints %}
             <div class="accordion-item">
               <h2 class="accordion-header" id="panelsStayOpen-heading{{ sprint.id }}">
-                <button class="accordion-button {% if current_lesson not in sprint.lessons %}collapsed{% endif %}" 
-                type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse{{ sprint.id }}" 
-                aria-expanded="false" aria-controls="panelsStayOpen-collapse{{ sprint.id }}">{{ sprint.name }}</button>
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                data-bs-target="#panelsStayOpen-collapse{{ sprint.id }}" aria-expanded="false" 
+                aria-controls="panelsStayOpen-collapse{{ sprint.id }}">{{ sprint.name }}</button>
               </h2>
-              <div id="panelsStayOpen-collapse{{ sprint.id }}" class="accordion-collapse {% if current_lesson not in sprint.lessons %}collapse{% endif %}" 
+              <!-- <div id="panelsStayOpen-collapse{{ sprint.id }}" class="accordion-collapse collapse" 
                 aria-labelledby="panelsStayOpen-heading{{ sprint.id }}">
                   <ol class="list-group list-group-numbered">
-                    {% for lesson in sprint.lessons %}
-                      <li class="list-group-item {% if lesson.id == current_lesson.id %}active{% endif %}">
-                        <a href="{{ url_for('lesson', pk=lesson.id) }}" 
-                        class="{% if lesson.id == current_lesson.id %}text-white{% endif %}">{{ lesson.name }}</a>
-                      </li>
-                    {% endfor %}
+                    <li class="list-group-item">A list item</li>
                   </ol>
-              </div>
+              </div> -->
             </div>
             {% endfor %}
           </div>
