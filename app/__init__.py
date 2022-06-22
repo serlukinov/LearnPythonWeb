@@ -1,5 +1,5 @@
-from app.model import db, Track, Sprint, Lesson, Content, User
-from flask import Flask, render_template
+from app.model import db, Track, Sprint, Lesson, Content, User, progress
+from flask import Flask, redirect, render_template, request, url_for
 
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
@@ -7,8 +7,8 @@ from flask_admin.contrib.sqla import ModelView
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_pyfile('config.py') #указываем откуда брать параметры конфигурации
-    db.init_app(app) #инициализируем базу данных
+    app.config.from_pyfile('config.py')  # указываем откуда брать параметры конфигурации
+    db.init_app(app)  # инициализируем базу данных
 
     admin = Admin(app, name='Admin', template_mode='bootstrap4')
     admin.add_view(ModelView(Track, db.session))
@@ -20,34 +20,31 @@ def create_app():
 
     @app.route("/")
     def index():
+        # progress = progress.query.filter_by(user_id=request.user.id).order_by('-created').first()  # для фильтрации прогресса для user
+        lesson = Lesson.query.first()
+
+        return redirect(url_for('lesson', pk=lesson.id))
+
+
+    @app.route("/lesson/<int:pk>")
+    def lesson(pk):
         title = "Learn Python Web"
-        tracks =  Track.query.all()
-        sprints = Sprint.query.filter_by(track_id=1).all()
+        tracks = Track.query.all()
+        lesson = Lesson.query.filter_by(id=pk).first()
 
         context = {
             "tracks": tracks,
-            "sprints": sprints,
+            "current_lesson": lesson,
         }
-
         return render_template('index.html', page_title=title, **context)
 
 
-    # @app.route("/track/<int:pk>")
-    # def track(pk):
-    #     tracks = Track.query.all()
-    #     sprints=current_sprint
-    #     current_track = Track.query.filter_by(id=pk).first()
-    #     current_sprint = Sprint.query.filter_by(track_id=current_track).first()
-    #     current_lesson = Lesson.query.filter_by(sprint_id=current_sprint).first()
-
-    #     context = {
-    #         "tracks": tracks,
-    #         "current_lesson": current_lesson,
-    #         "current_sprint": current_sprint,
-    #         "current_track": current_track,
-    #     }
-
-    #     return render_template('track.html', **context)
+    @app.route("/track/<int:pk>")
+    def track(pk):
+        track = Track.query.filter_by(id=pk).first()
+        sprint = track.sprints.first()
+        lesson = sprint.lessons.first()
+        return redirect(url_for('lesson', pk=lesson.id))
 
     return app
 
