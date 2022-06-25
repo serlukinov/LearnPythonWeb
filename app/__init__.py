@@ -36,6 +36,7 @@ def create_app():
             "tracks": tracks,
             "current_lesson": lesson,
         }
+
         return render_template('index.html', page_title=title, **context)
 
 
@@ -44,6 +45,7 @@ def create_app():
         track = Track.query.filter_by(id=pk).first()
         sprint = track.sprints.first()
         lesson = sprint.lessons.first()
+
         return redirect(url_for('lesson', pk=lesson.id))
 
     return app
