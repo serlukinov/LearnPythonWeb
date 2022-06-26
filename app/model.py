@@ -1,8 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_utils import ChoiceType
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
-
+migrate = Migrate()
 
 class Track(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -99,12 +100,13 @@ class Content(db.Model):
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    user_pass = db.Column(db.String, nullable=False)
+    username = db.Column(db.String(80), unique=True, index=True, nullable=False)
+    password = db.Column(db.String(128), nullable=False)
+    role = db.Column(db.String(10), index=True)
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=False)
-    email = db.Column(db.String, nullable=False)
-    avatar = db.Column(db.String, nullable=False)
+    email = db.Column(db.String(50), nullable=False)
+    avatar = db.Column(db.String, nullable=True)
     telegram = db.Column(db.String, nullable=False)
     progress = db.relationship(
         'Content',
