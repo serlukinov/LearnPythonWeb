@@ -32,11 +32,11 @@ class Sprint(db.Model):
         backref='sprint',
         lazy='dynamic',
     )
-    # contents = db.relationship(
-    #     'Content',
-    #     backref='sprint',
-    #     lazy='dynamic',
-    # )
+    contents = db.relationship(
+        'Content',
+        backref='sprint',
+        lazy='dynamic',
+    )
 
     def __repr__(self):
         return '<Sprint %r>' % self.name
@@ -84,13 +84,13 @@ class Content(db.Model):
     lesson_id = db.Column(
         db.Integer,
         db.ForeignKey('lesson.id'),
-        nullable=False,
+        nullable=True,
     )
-    # sprint_id = db.Column(
-    #     db.Integer,
-    #     db.ForeignKey('sprint.id'),
-    #     nullable=False,
-    # )
+    sprint_id = db.Column(
+        db.Integer,
+        db.ForeignKey('sprint.id'),
+        nullable=True,
+    )
     type = db.Column(ChoiceType(CONTENT_TYPE), im_pl=db.Integer())
 
     def __repr__(self):
