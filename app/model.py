@@ -1,8 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_utils import ChoiceType
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
-
+migrate = Migrate()
 
 class Track(db.Model):
     id = db.Column(db.Integer, primary_key=True)

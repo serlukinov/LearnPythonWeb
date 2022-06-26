@@ -1,15 +1,16 @@
-from app.model import db, Track, Sprint, Lesson, Content, User, progress
+from app.model import db, migrate, Track, Sprint, Lesson, Content, User, progress
 from flask import Flask, redirect, render_template, request, url_for
 
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_migrate import Migrate
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')  # указываем откуда брать параметры конфигурации
     db.init_app(app)  # инициализируем базу данных
-    migrate = Migrate(app, db)
+    migrate.init_app(app, db, render_as_batch=True)
 
     admin = Admin(app, name='Admin', template_mode='bootstrap4')
     admin.add_view(ModelView(Track, db.session))
