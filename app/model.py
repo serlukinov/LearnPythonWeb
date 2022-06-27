@@ -92,7 +92,7 @@ class Content(db.Model):
         db.ForeignKey('sprint.id'),
         nullable=True,
     )
-    type = db.Column(ChoiceType(CONTENT_TYPE), im_pl=db.Integer())
+    type = db.Column(ChoiceType(CONTENT_TYPE, impl=db.Integer()))
 
     def __repr__(self):
         return '<Content %r>' % self.url

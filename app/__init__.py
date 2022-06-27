@@ -30,11 +30,11 @@ def create_app():
     def lesson(pk):
         title = "Learn Python Web"
         tracks = Track.query.all()
-        lesson = Lesson.query.filter_by(id=pk).first()
+        current_lesson = Lesson.query.filter_by(id=pk).first()
 
         context = {
             "tracks": tracks,
-            "current_lesson": lesson,
+            "current_lesson": current_lesson,
         }
 
         return render_template("index.html", page_title=title, **context)
