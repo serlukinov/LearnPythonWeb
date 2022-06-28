@@ -1,17 +1,16 @@
-from app.model import db, Track, Sprint, Lesson, Content, User, progress
-from flask import Flask, redirect, render_template, request, url_for
+from app.model import db, migrate, Track, Sprint, Lesson, Content, User, progress
+from flask import Flask, redirect, render_template, url_for
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from flask_migrate import Migrate
 from app.forms import LoginForm
 from flask_login import LoginManager
 
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_pyfile("config.py")  # указываем откуда брать параметры конфигурации
-    db.init_app(app)  # инициализируем базу данных
-    migrate = Migrate(app, db, render_as_batch=True)
+    app.config.from_pyfile("config.py")
+    db.init_app(app)
+    migrate.init_app(app, db, render_as_batch=True)
 
     admin = Admin(app, name="Admin", template_mode="bootstrap4")
     admin.add_view(ModelView(Track, db.session))
@@ -31,11 +30,11 @@ def create_app():
     def lesson(pk):
         title = "Learn Python Web"
         tracks = Track.query.all()
-        lesson = Lesson.query.filter_by(id=pk).first()
+        current_lesson = Lesson.query.filter_by(id=pk).first()
 
         context = {
             "tracks": tracks,
-            "current_lesson": lesson,
+            "current_lesson": current_lesson,
         }
 
         return render_template("index.html", page_title=title, **context)
@@ -54,9 +53,14 @@ def create_app():
         login_form = LoginForm()
         return render_template("login.html", page_title=title, form=login_form)
 
-    @app.route("/welcome/<int:pk>")
-    def welcom(pk):
-        first_name = User.query.filter_by(id=pk).first()
-        return render_template("welcome_page.html", first_name=first_name)
+    @app.route("/welcome")
+    def welcome():
+        title = "Learn Python Web"
+        return render_template("welcome_page.html", page_title=title)
+
+    # @app.route("/welcome/<int:pk>")
+    # def welcom(pk):
+    #     first_name = User.query.filter_by(id=pk).first()
+    #     return render_template("welcome_page.html", first_name=first_name)
 
     return app
