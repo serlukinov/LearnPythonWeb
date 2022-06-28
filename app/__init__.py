@@ -54,4 +54,9 @@ def create_app():
         login_form = LoginForm()
         return render_template("login.html", page_title=title, form=login_form)
 
+    @app.route("/welcome/<int:pk>")
+    def welcom(pk):
+        first_name = User.query.filter_by(id=pk).first()
+        return render_template("welcome_page.html", first_name=first_name)
+
     return app
