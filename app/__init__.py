@@ -1,66 +1,41 @@
-from app.model import db, migrate, Track, Sprint, Lesson, Content, User, progress
-from flask import Flask, redirect, render_template, url_for
-from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
-from app.forms import LoginForm
-from flask_login import LoginManager
+from flask import Flask, flash, render_template, url_for
+
+# from flask_admin import Admin
+# from flask_admin.contrib.sqla import ModelView
+# from app.lessons.models import Content, Lesson, Sprint, Track
+from flask_login import LoginManager, current_user, login_required
+from flask_migrate import Migrate
+
+from app.db import db
+from app.admin.views import blueprint as admin_blueprint
+from app.lessons.views import blueprint as lessons_blueprint
+from app.user.models import User
+from app.user.views import blueprint as user_blueprint
 
 
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile("config.py")
     db.init_app(app)
-    migrate.init_app(app, db, render_as_batch=True)
+    migrate = Migrate(app, db)
 
-    admin = Admin(app, name="Admin", template_mode="bootstrap4")
-    admin.add_view(ModelView(Track, db.session))
-    admin.add_view(ModelView(Sprint, db.session))
-    admin.add_view(ModelView(Lesson, db.session))
-    admin.add_view(ModelView(Content, db.session))
-    admin.add_view(ModelView(User, db.session))
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    login_manager.login_view = "user.login"
 
-    @app.route("/")
-    def index():
-        # progress = progress.query.filter_by(user_id=request.user.id).order_by('-created').first()  # для фильтрации прогресса для user
-        lesson = Lesson.query.first()
+    app.register_blueprint(admin_blueprint)
+    app.register_blueprint(lessons_blueprint)
+    app.register_blueprint(user_blueprint)
 
-        return redirect(url_for("lesson", pk=lesson.id))
+    # admin = Admin(app, name="Admin", template_mode="bootstrap4")
+    # admin.add_view(ModelView(Track, db.session))
+    # admin.add_view(ModelView(Sprint, db.session))
+    # admin.add_view(ModelView(Lesson, db.session))
+    # admin.add_view(ModelView(Content, db.session))
+    # admin.add_view(ModelView(User, db.session))
 
-    @app.route("/lesson/<int:pk>")
-    def lesson(pk):
-        title = "Learn Python Web"
-        tracks = Track.query.all()
-        current_lesson = Lesson.query.filter_by(id=pk).first()
-
-        context = {
-            "tracks": tracks,
-            "current_lesson": current_lesson,
-        }
-
-        return render_template("index.html", page_title=title, **context)
-
-    @app.route("/track/<int:pk>")
-    def track(pk):
-        track = Track.query.filter_by(id=pk).first()
-        sprint = track.sprints.first()
-        lesson = sprint.lessons.first()
-
-        return redirect(url_for("lesson", pk=lesson.id))
-
-    @app.route("/login")
-    def login():
-        title = "Авторизация"
-        login_form = LoginForm()
-        return render_template("login.html", page_title=title, form=login_form)
-
-    @app.route("/welcome")
-    def welcome():
-        title = "Learn Python Web"
-        return render_template("welcome_page.html", page_title=title)
-
-    # @app.route("/welcome/<int:pk>")
-    # def welcom(pk):
-    #     first_name = User.query.filter_by(id=pk).first()
-    #     return render_template("welcome_page.html", first_name=first_name)
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(user_id)
 
     return app
