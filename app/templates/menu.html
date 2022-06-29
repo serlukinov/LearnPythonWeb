@@ -11,10 +11,11 @@
                 <a class="nav-link" href="/">Главная страница</a>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Искать</button>
+
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+            <input type="search" class="form-control" placeholder="Поиск..." aria-label="Поиск">
         </form>
+
         <ul class="navbar-nav">
             {% if current_user.is_authenticated %}
             <li class="nav-item">
