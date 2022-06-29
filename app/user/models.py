@@ -1,13 +1,8 @@
 from flask_login import UserMixin
-from flask_sqlalchemy import SQLAlchemy
 
-from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
-from app import db
+from app.db import db
 from app.lessons.models import progress
-
-db = SQLAlchemy()
-migrate = Migrate()
 
 
 class User(db.Model, UserMixin):
@@ -19,7 +14,8 @@ class User(db.Model, UserMixin):
     last_name = db.Column(db.String, nullable=False)
     email = db.Column(db.String(50), nullable=False)
     avatar = db.Column(db.String, nullable=True)
-    telegram = db.Column(db.String, nullable=False)
+    telegram = db.Column(db.String, nullable=True)
+
     progress = db.relationship(
         "Content",
         secondary=progress,

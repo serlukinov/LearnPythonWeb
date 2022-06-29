@@ -23,7 +23,7 @@
           </ul>
 
           <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-            <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+            <input type="search" class="form-control" placeholder="Поиск..." aria-label="Поиск">
           </form>
 
           <div class="dropdown text-end">
@@ -35,7 +35,7 @@
               <li><a class="dropdown-item" href="#">Settings</a></li>
               <li><a class="dropdown-item" href="#">Profile</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Sign out</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('user.logout') }}">Выйти</a></li>
             </ul>
           </div>
         </div>
@@ -45,7 +45,7 @@
       <div class="row">
         <div class="btn-group me-2" role="group" aria-label="Second group">
           {% for track in tracks %}
-            <a href="{{ url_for('track', pk=track.id) }}" 
+            <a href="{{ url_for('lessons.track', pk=track.id) }}" 
               class="btn btn-secondary {% if track.id == current_lesson.sprint.track.id %}
               active disabled{% endif %}">{{ track.name }}</a>
           {% endfor %}
@@ -66,7 +66,7 @@
                   <ol class="list-group list-group-numbered">
                     {% for lesson in sprint.lessons %}
                       <li class="list-group-item {% if lesson.id == current_lesson.id %}active{% endif %}">
-                        <a href="{{ url_for('lesson', pk=lesson.id) }}" 
+                        <a href="{{ url_for('lessons.lesson', pk=lesson.id) }}" 
                         class="{% if lesson.id == current_lesson.id %}text-white{% endif %}">{{ lesson.name }}</a>
                       </li>
                     {% endfor %}
