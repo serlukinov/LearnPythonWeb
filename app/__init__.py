@@ -1,12 +1,12 @@
-from flask import Flask, flash, render_template, url_for
+from flask import Flask
 
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from flask_login import LoginManager, current_user, login_required
+from flask_login import LoginManager
 from flask_migrate import Migrate
 
 from app.db import db
-from app.lessons.models import Content, Lesson, Sprint, Track, progress
+from app.lessons.models import Content, Lesson, Sprint, Track
 from app.users.models import User
 
 from app.admins.views import blueprint as admin_blueprint

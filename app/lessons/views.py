@@ -1,18 +1,8 @@
-from flask import (
-    abort,
-    Blueprint,
-    current_app,
-    flash,
-    render_template,
-    redirect,
-    request,
-    url_for,
-)
-from flask_login import current_user, login_required
+from flask import Blueprint, render_template, redirect, url_for
 from app.lessons.models import Lesson, Track
 
 
-blueprint = Blueprint("lessons", __name__, url_prefix='/users')
+blueprint = Blueprint("lessons", __name__, url_prefix='/lessons')
 
 
 @blueprint.route("/")

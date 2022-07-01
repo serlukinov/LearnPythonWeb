@@ -5,16 +5,23 @@ from app.db import db
 from app.users.forms import LoginForm, RegistrationForm
 
 from app.users.models import User
-from app.utils import get_redirect_target
+# from app.utils import get_redirect_target
 from app.users.models import User
 
-blueprint = Blueprint('users', __name__, url_prefix='/users')
+blueprint = Blueprint('users', __name__, url_prefix='/')
+
+
+@blueprint.route("/")
+def index():
+    if current_user.is_authenticated:
+        return redirect(url_for("lessons.index"))
+    return redirect(url_for("users.login"))
 
 
 @blueprint.route("/login")
 def login():
     if current_user.is_authenticated:
-        return redirect(get_redirect_target())
+        return redirect(url_for("lessons.index"))  # redirect(get_redirect_target())
     title = "Авторизация"
     login_form = LoginForm()
     return render_template("users/login.html", page_title=title, form=login_form)
@@ -23,14 +30,14 @@ def login():
 @blueprint.route("/process-login", methods=["POST", "GET"])
 def process_login():
     form = LoginForm()
-
     if form.validate_on_submit():
         user = User.query.filter(User.username == form.username.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             flash("Вы успешно вошли на сайт")
-            return redirect(get_redirect_target())
-
+            return redirect(url_for("lessons.index"))  # redirect(get_redirect_target())
+        else:
+            return redirect(url_for("users.register"))
     flash("Неправильные имя пользователя или пароль")
     return redirect(url_for("users.login"))
 
@@ -39,7 +46,7 @@ def process_login():
 def logout():
     logout_user()
     flash("Вы успешно разлогинились")
-    return redirect(url_for("lessons.index"))
+    return redirect(url_for("users.login"))
 
 
 @blueprint.route('/register')
