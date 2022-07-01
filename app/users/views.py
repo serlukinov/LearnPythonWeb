@@ -2,13 +2,13 @@ from flask import Blueprint, flash, render_template, redirect, url_for
 from flask_login import current_user, login_user, logout_user
 
 from app.db import db
-from app.user.forms import LoginForm, RegistrationForm
+from app.users.forms import LoginForm, RegistrationForm
 
-from app.user.models import User
+from app.users.models import User
 from app.utils import get_redirect_target
-from app.user.models import User
+from app.users.models import User
 
-blueprint = Blueprint('user', __name__, url_prefix='/users')
+blueprint = Blueprint('users', __name__, url_prefix='/users')
 
 
 @blueprint.route("/login")
@@ -17,7 +17,7 @@ def login():
         return redirect(get_redirect_target())
     title = "Авторизация"
     login_form = LoginForm()
-    return render_template("user/login.html", page_title=title, form=login_form)
+    return render_template("users/login.html", page_title=title, form=login_form)
 
 
 @blueprint.route("/process-login", methods=["POST", "GET"])
@@ -32,7 +32,7 @@ def process_login():
             return redirect(get_redirect_target())
 
     flash("Неправильные имя пользователя или пароль")
-    return redirect(url_for("user.login"))
+    return redirect(url_for("users.login"))
 
 
 @blueprint.route("/logout")
@@ -48,7 +48,7 @@ def register():
         return redirect(url_for('lessons.index'))
     title = "Регистрация"
     form = RegistrationForm()
-    return render_template('user/registration.html', page_title=title, form=form)
+    return render_template('users/registration.html', page_title=title, form=form)
 
 
 @blueprint.route('/process-reg', methods=['POST', 'GET'])
@@ -66,7 +66,7 @@ def process_reg():
         db.session.add(news_user)
         db.session.commit()
         flash('Вы успешно зарегистрировались!')
-        return redirect(url_for('user.login'))
+        return redirect(url_for('users.login'))
     else:
         for field, errors in form.errors.items():
             for error in errors:
@@ -74,4 +74,4 @@ def process_reg():
                     getattr(form, field).label.text,
                     error
                 ))
-        return redirect(url_for('user.register'))
+        return redirect(url_for('users.register'))
