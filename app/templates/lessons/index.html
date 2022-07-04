@@ -97,9 +97,10 @@
               <h3>Дополнительные материалы!</h3>
               <div class="container">
                 <div class="row row-cols-auto">
-                  {% for content in current_lesson.sprint.github_reposit() %}
+                  {% for content in current_lesson.sprint.contents %}
                     <a href="{{ content.url }}">
-                      <img src="{{ url_for('static', filename=thumbnail(content.image)) }}"></a>
+                      <img src="{{ url_for('static', filename=thumbnail(content.image)) }}">
+                    </a>
                   {% endfor %}
                 </div>
               </div>

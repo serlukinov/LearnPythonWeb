@@ -5,8 +5,7 @@ from sqlalchemy_utils import ChoiceType
 from markupsafe import Markup
 from flask_admin import form
 from flask_admin.contrib.sqla import ModelView
-from flask import current_app
-
+from flask import url_for
 
 class Track(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -42,8 +41,8 @@ class Sprint(db.Model):
         lazy="dynamic",
     )
 
-    def github_reposit(self):
-        return Content.query.filter_by(sprint_id=self.id, type=Content.GITHUB)
+    # def github_reposit(self):
+    #     return Content.query.filter_by(sprint_id=self.id)
 
     def __repr__(self):
         return "<Sprint %r>" % self.name
@@ -102,7 +101,7 @@ class Content(db.Model):
     image = db.Column(db.Unicode(128), nullable=True)
 
     def __repr__(self):
-        return "<Content %r>" % self.url
+        return "<Content %r>" % self.image
 
 
 class ContentModelView(ModelView):
@@ -111,7 +110,7 @@ class ContentModelView(ModelView):
             return ''
 
         filename = form.thumbgen_filename(model.path)
-        url = url_for('images', filename=filename)
+        url = url_for('static', filename=filename)
 
         return Markup(f'<img src="{url}">')
 
@@ -122,7 +121,7 @@ class ContentModelView(ModelView):
     form_extra_fields = {
         'image': form.ImageUploadField(
             'Image',
-            base_path=os.path.join(os.path.dirname('app'), '/static/images'),
-            # thumbnail_size=(320, 320, True),
+            base_path=os.path.join(os.path.dirname(__file__), '..', 'static'),
+            thumbnail_size=(320, 320, True),
         )
     }

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for
-from app.lessons.models import Lesson, Sprint, Track
+from app.lessons.models import Lesson, Sprint, Track, Content
 from flask_admin import form
 
 blueprint = Blueprint("lessons", __name__, url_prefix='/lessons')
@@ -18,11 +18,12 @@ def lesson(pk):
     title = "Learn Python Web"
     tracks = Track.query.all()
     current_lesson = Lesson.query.filter_by(id=pk).first()
+    contents = Content.query.all()
 
     context = {
         "tracks": tracks,
         "current_lesson": current_lesson,
-
+        "contents": contents,
     }
 
     return render_template("lessons/index.html", page_title=title, thumbnail=form.thumbgen_filename, **context)
