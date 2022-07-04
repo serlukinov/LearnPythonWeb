@@ -1,5 +1,11 @@
+import os
+
 from app.db import db
 from sqlalchemy_utils import ChoiceType
+from markupsafe import Markup
+from flask_admin import form
+from flask_admin.contrib.sqla import ModelView
+from flask import current_app
 
 
 class Track(db.Model):
@@ -35,6 +41,9 @@ class Sprint(db.Model):
         backref="sprint",
         lazy="dynamic",
     )
+
+    def github_reposit(self):
+        return Content.query.filter_by(sprint_id=self.id, type=Content.GITHUB)
 
     def __repr__(self):
         return "<Sprint %r>" % self.name
@@ -90,6 +99,30 @@ class Content(db.Model):
         nullable=True,
     )
     type = db.Column(ChoiceType(CONTENT_TYPE, impl=db.Integer()))
+    image = db.Column(db.Unicode(128), nullable=True)
 
     def __repr__(self):
         return "<Content %r>" % self.url
+
+
+class ContentModelView(ModelView):
+    def _list_thumbnail(view, context, model, name):
+        if not model.path:
+            return ''
+
+        filename = form.thumbgen_filename(model.path)
+        url = url_for('images', filename=filename)
+
+        return Markup(f'<img src="{url}">')
+
+    column_formatters = {
+        'path': _list_thumbnail
+    }
+
+    form_extra_fields = {
+        'image': form.ImageUploadField(
+            'Image',
+            base_path=os.path.join(os.path.dirname('app'), '/static/images'),
+            # thumbnail_size=(320, 320, True),
+        )
+    }

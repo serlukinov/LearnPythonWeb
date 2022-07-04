@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for
-from app.lessons.models import Lesson, Track
-
+from app.lessons.models import Lesson, Sprint, Track
+from flask_admin import form
 
 blueprint = Blueprint("lessons", __name__, url_prefix='/lessons')
 
@@ -22,9 +22,10 @@ def lesson(pk):
     context = {
         "tracks": tracks,
         "current_lesson": current_lesson,
+
     }
 
-    return render_template("lessons/index.html", page_title=title, **context)
+    return render_template("lessons/index.html", page_title=title, thumbnail=form.thumbgen_filename, **context)
 
 
 @blueprint.route("/track/<int:pk>")
