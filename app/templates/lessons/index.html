@@ -91,16 +91,21 @@
               {% endfor %}
             </div>
             <div class="col">
-              <td>{{ current_lesson.sprint.description }}</td>
+              <h4>{{ current_lesson.sprint.description }}</h4>
             </div>
             <div class="col">
-              <h3>Дополнительные материалы!</h3>
+              <h5>Дополнительные материалы!</h5>
               <div class="container">
-                <div class="row row-cols-auto">
+                <div class="row row-cols-2">
                   {% for content in current_lesson.sprint.contents %}
+                  <div class="col-2">
                     <a href="{{ content.url }}">
                       <img src="{{ url_for('static', filename=thumbnail(content.image)) }}">
                     </a>
+                  </div>
+                  <div class="col-10">
+                    {{ content.description }}
+                  </div>
                   {% endfor %}
                 </div>
               </div>

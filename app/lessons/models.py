@@ -99,9 +99,10 @@ class Content(db.Model):
     )
     type = db.Column(ChoiceType(CONTENT_TYPE, impl=db.Integer()))
     image = db.Column(db.Unicode(128), nullable=True)
+    description = db.Column(db.Text, nullable=True)
 
     def __repr__(self):
-        return "<Content %r>" % self.image
+        return "<Content %r>" % self.url
 
 
 class ContentModelView(ModelView):
@@ -122,6 +123,6 @@ class ContentModelView(ModelView):
         'image': form.ImageUploadField(
             'Image',
             base_path=os.path.join(os.path.dirname(__file__), '..', 'static'),
-            thumbnail_size=(320, 320, True),
+            thumbnail_size=(120, 120, True),
         )
     }
