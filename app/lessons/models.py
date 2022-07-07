@@ -41,8 +41,8 @@ class Sprint(db.Model):
         lazy="dynamic",
     )
 
-    # def github_reposit(self):
-    #     return Content.query.filter_by(sprint_id=self.id)
+    def github_reposit(self):
+        return Content.query.filter_by(sprint_id=self.id)
 
     def __repr__(self):
         return "<Sprint %r>" % self.name

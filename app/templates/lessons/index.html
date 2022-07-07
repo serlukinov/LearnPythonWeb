@@ -42,7 +42,7 @@
         <div class="row row-cols-1">
           <div class="col">
             {% for content in current_lesson.lesson_video() %}
-              <iframe width="850" height="480"
+              <iframe width="840" height="450"
                 src="https://www.youtube.com/embed/{{ content.url }}" 
                 title="YouTube video player" frameborder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -63,6 +63,7 @@
                 {% for content in current_lesson.sprint.github_reposit() %}
                   <a href="{{ content.url }}">
                     <img src="{{ url_for('static', filename=thumbnail(content.image)) }}"></a>
+                    {{ content.description }}
                 {% endfor %}
               </div>
             </div>

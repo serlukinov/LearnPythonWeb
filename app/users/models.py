@@ -12,7 +12,7 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=False)
     email = db.Column(db.String(50), nullable=False)
-    avatar = db.Column(db.String, nullable=True)
+    avatar = db.Column(db.Unicode(128), nullable=True)
     telegram = db.Column(db.String, nullable=True)
 
     progress = db.relationship(
