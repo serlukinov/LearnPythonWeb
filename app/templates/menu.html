@@ -27,6 +27,7 @@
                     <li><a class="dropdown-item" href="#">Личный кабинет</a></li>
                     <li><a class="dropdown-item" href="#">Сообщения</a></li>
                     <li><a class="dropdown-item" href="#">Проекты</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('users.promo') }}">Welcome page</a></li>
                     <li><hr class="dropdown-divider"></li>
                     {% if current_user.is_admin %}
                     <li><a class="dropdown-item" href="{{ url_for('admins.admin_index') }}">Админка</a></li>
