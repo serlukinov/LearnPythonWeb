@@ -5,7 +5,7 @@ from sqlalchemy_utils import ChoiceType
 from markupsafe import Markup
 from flask_admin import form
 from flask_admin.contrib.sqla import ModelView
-from flask import current_app
+from flask import current_app, url_for
 
 
 class Track(db.Model):
@@ -108,21 +108,19 @@ class Content(db.Model):
 class ContentModelView(ModelView):
     def _list_thumbnail(view, context, model, name):
         if not model.path:
-            return ''
+            return ""
 
         filename = form.thumbgen_filename(model.path)
-        url = url_for('images', filename=filename)
+        url = url_for("images", filename=filename)
 
         return Markup(f'<img src="{url}">')
 
-    column_formatters = {
-        'path': _list_thumbnail
-    }
+    column_formatters = {"path": _list_thumbnail}
 
     form_extra_fields = {
-        'image': form.ImageUploadField(
-            'Image',
-            base_path=os.path.join(os.path.dirname('app'), '/static/images'),
+        "image": form.ImageUploadField(
+            "Image",
+            base_path=os.path.join(os.path.dirname("app"), "/static/images"),
             # thumbnail_size=(320, 320, True),
         )
     }
