@@ -1,40 +1,39 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Learn Python</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" 
+        aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span></button><a class="navbar-brand" href="#">LEARN PYTHON WEB</a>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/">Главная страница</a>
-            </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Искать</button>
-        </form>
         <ul class="navbar-nav">
-            {% if current_user.is_authenticated %}
-            <li class="nav-item">
-                <span class="nav-link">Привет, {{ current_user.username }}!</span>
-            </li>
-            {% if current_user.is_admin %}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('admin.admin_index') }}">Админка</a>
-            </li>
-            {% endif %}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('user.logout') }}">Выйти</a>
-            </li>
+            {% if not current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('users.register') }}">Регистрация</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('users.login') }}">Войти</a>
+                </li>
             {% else %}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('user.register') }}">Регистрация</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('user.login') }}">Войти</a>
-            </li>
+
+            <form class="d-flex justify-content-center" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-secondary me-2" type="submit">Search</button>
+            </form>
+
+            <div class="dropdown text-end">
+                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                </a>
+                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser1">
+                    <li><a class="dropdown-item" href="#">Личный кабинет</a></li>
+                    <li><a class="dropdown-item" href="#">Сообщения</a></li>
+                    <li><a class="dropdown-item" href="#">Проекты</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    {% if current_user.is_admin %}
+                    <li><a class="dropdown-item" href="{{ url_for('admins.admin_index') }}">Админка</a></li>
+                    {% endif %}
+                    <li><a class="dropdown-item" href="{{ url_for('users.logout') }}">Выйти</a></li>
+                </ul>
+            </div>
             {% endif %}
         </ul>
     </div>

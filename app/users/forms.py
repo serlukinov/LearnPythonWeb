@@ -1,7 +1,7 @@
+from app.users.models import User
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
-from app.user.models import User
 
 
 class LoginForm(FlaskForm):
@@ -11,17 +11,24 @@ class LoginForm(FlaskForm):
         render_kw={"class": "form-control"},
     )
     password = PasswordField(
-        "Пароль", validators=[DataRequired()], render_kw={"class": "form-control"}
+        "Пароль",
+        validators=[DataRequired()],
+        render_kw={"class": "form-control"}
     )
     remember_me = BooleanField(
-        "Запомнить меня", default=True, render_kw={"class": "form-check-input"}
+        "Запомнить меня", 
+        default=True, 
+        render_kw={"class": "form-check-input"}
     )
-    submit = SubmitField("Отправить", render_kw={"class": "btn btn-primary"})
+    submit = SubmitField(
+        "Отправить", 
+        render_kw={"class": "btn btn-primary"}
+    )
 
 
 class RegistrationForm(FlaskForm):
     username = StringField(
-        "Имя пользователя",
+        "Никнейм",
         validators=[DataRequired()],
         render_kw={"class": "form-control"},
     )
@@ -31,14 +38,28 @@ class RegistrationForm(FlaskForm):
         render_kw={"class": "form-control"},
     )
     password = PasswordField(
-        "Пароль", validators=[DataRequired()], render_kw={"class": "form-control"}
+        "Пароль", validators=[DataRequired()],
+        render_kw={"class": "form-control"}
     )
     password2 = PasswordField(
         "Повторите пароль",
         validators=[DataRequired(), EqualTo("password")],
         render_kw={"class": "form-control"},
     )
-    submit = SubmitField("Отправить!", render_kw={"class": "btn btn-primary"})
+    first_name = StringField(
+        "Имя",
+        validators=[DataRequired()],
+        render_kw={"class": "form-control"},
+    )
+    last_name = StringField(
+        "Фамилия",
+        validators=[DataRequired()],
+        render_kw={"class": "form-control"},
+    )
+    submit = SubmitField(
+        "Отправить!", 
+        render_kw={"class": "btn btn-primary"},
+    )
 
     def validate_username(self, username):
         user_count = User.query.filter_by(username=username.data).count()

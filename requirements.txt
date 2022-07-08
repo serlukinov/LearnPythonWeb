@@ -17,9 +17,13 @@ itsdangerous==2.1.2
 Jinja2==3.1.2
 Mako==1.2.0
 MarkupSafe==2.1.1
+<<<<<<< HEAD
 mypy-extensions==0.4.3
 pathspec==0.9.0
 platformdirs==2.5.2
+=======
+Pillow==9.2.0
+>>>>>>> 2f9251fac3cc5b315033df09aa3077e1d9c646ba
 six==1.16.0
 SQLAlchemy==1.4.37
 SQLAlchemy-Utils==0.38.2
