@@ -73,7 +73,7 @@ def process_reg():
         db.session.add(news_user)
         db.session.commit()
         flash('Вы успешно зарегистрировались!')
-        return redirect(url_for('users.login'))
+        return  render_template('welcome_page.html')
     else:
         for field, errors in form.errors.items():
             for error in errors:
@@ -82,3 +82,8 @@ def process_reg():
                     error
                 ))
         return redirect(url_for('users.register'))
+
+
+@blueprint.route("/promo")
+def promo():
+    return render_template('welcome_page.html')
