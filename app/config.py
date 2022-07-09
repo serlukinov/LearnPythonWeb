@@ -6,6 +6,8 @@ SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, '..', 'app.db')  
 
 SECRET_KEY = "dgdfgddfg3g3ug43gj3g03049lkcjkr43r43"
 
-# IMAGE_URL = os.path.join(basedir, 'app/static/images')
+# AVATAR_ROOT = os.path.join(basedir, 'static', 'avatars', filename)
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+WTF_CSRF_ENABLED = False

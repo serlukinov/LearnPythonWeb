@@ -1,13 +1,11 @@
 import os
-from flask import Blueprint, flash, render_template, redirect, url_for
-from flask_login import current_user, login_user, logout_user
 
 from app.db import db
 from app.users.forms import LoginForm, RegistrationForm
-
-from app.users.models import User
 # from app.utils import get_redirect_target
 from app.users.models import User
+from flask import Blueprint, flash, render_template, redirect, url_for
+from flask_login import current_user, login_user, logout_user
 from werkzeug.utils import secure_filename
 
 blueprint = Blueprint('users', __name__, url_prefix='/')
@@ -64,10 +62,10 @@ def register():
 def process_reg():
     form = RegistrationForm()
     if form.validate_on_submit():
-        f = form.avatar.data
-        filename = secure_filename(f.filename)
-        f.save(os.path.join(
-            os.path.dirname('config.py'), '..', 'static', 'avatars', filename
+        avatar = form.avatar.data
+        filename = secure_filename(avatar.filename)
+        avatar.save(os.path.join(
+            os.path.abspath(os.path.dirname(__file__)), '..', 'static/avatars/', filename
         ))
         news_user = User(
             username=form.username.data, 
@@ -75,13 +73,13 @@ def process_reg():
             role='user',
             first_name=form.first_name.data,
             last_name=form.last_name.data,
-            # avatar=os.path.dirname(filename),
+            avatar='avatars/' + filename,
             )
         news_user.set_password(form.password.data)
         db.session.add(news_user)
         db.session.commit()
         flash('Вы успешно зарегистрировались!')
-        return  render_template('welcome_page.html')
+        return  redirect(url_for('users.login'))
     else:
         for field, errors in form.errors.items():
             for error in errors:
@@ -94,4 +92,5 @@ def process_reg():
 
 @blueprint.route("/promo")
 def promo():
-    return render_template('welcome_page.html')
+    avatar=current_user.avatar
+    return render_template('welcome_page.html', avatar=avatar)

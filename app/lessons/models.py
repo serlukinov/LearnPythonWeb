@@ -1,16 +1,12 @@
 import os
 
 from app.db import db
-from sqlalchemy_utils import ChoiceType
-from markupsafe import Markup
 from flask_admin import form
 from flask_admin.contrib.sqla import ModelView
-<<<<<<< HEAD
 from flask import url_for
-=======
-from flask import current_app, url_for
+from markupsafe import Markup
+from sqlalchemy_utils import ChoiceType
 
->>>>>>> master
 
 class Track(db.Model):
     id = db.Column(db.Integer, primary_key=True)

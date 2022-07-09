@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for
-from app.lessons.models import Lesson, Sprint, Track, Content
+from app.lessons.models import Lesson, Track, Content
 from flask_admin import form
+from flask_login import current_user
 
 blueprint = Blueprint("lessons", __name__, url_prefix='/lessons')
 
@@ -19,11 +20,12 @@ def lesson(pk):
     tracks = Track.query.all()
     current_lesson = Lesson.query.filter_by(id=pk).first()
     contents = Content.query.all()
-
+    avatar=current_user.avatar
     context = {
         "tracks": tracks,
         "current_lesson": current_lesson,
         "contents": contents,
+        "avatar": avatar,
     }
 
     return render_template("lessons/index.html", page_title=title, thumbnail=form.thumbgen_filename, **context)
