@@ -5,7 +5,7 @@ from flask_admin import form
 from flask_admin.contrib.sqla import ModelView
 from flask import url_for
 from markupsafe import Markup
-from sqlalchemy_utils import ChoiceType
+from sqlalchemy_utils import ChoiceType, generic_relationship
 
 
 class Track(db.Model):
@@ -76,6 +76,16 @@ progress = db.Table(
     db.Column("user_id", db.Integer, db.ForeignKey("user.id"), primary_key=True),
     db.Column("content_id", db.Integer, db.ForeignKey("content.id"), primary_key=True),
 )
+
+
+class SprintProgress(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    object_type = db.Column(db.Unicode(255))
+    object_id = db.Column(db.Integer)
+    object = generic_relationship(object_type, object_id)
+
+    def __repr__(self):
+        return '<SprintProgress %r>' % self.id
 
 
 class Content(db.Model):

@@ -20,7 +20,7 @@
             <h2 class="accordion-header" id="panelsStayOpen-heading{{ sprint.id }}">
               <button class="accordion-button {% if current_lesson not in sprint.lessons %}collapsed{% endif %}" 
               type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse{{ sprint.id }}" 
-              aria-expanded="true" aria-controls="panelsStayOpen-collapse{{ sprint.id }}">{{ sprint.name }}</button>
+              aria-expanded="true" aria-controls="panelsStayOpen-collapse{{ sprint.id }}">{{ sprint.name[:8] }}</button>
             </h2>
             <div id="panelsStayOpen-collapse{{ sprint.id }}" class="accordion-collapse collapse 
             {% if current_lesson in sprint.lessons %}show{% endif %}" 
@@ -56,6 +56,11 @@
             {{ current_lesson.sprint.description }}
             {% endif %}
           </div>
+
+
+          <a href="#" class="btn btn-dark">Продолжить!<span class="progress-button"></span></a>
+
+
           <div class="col">
             <h3>Дополнительные материалы!</h3>
             <div class="container">
