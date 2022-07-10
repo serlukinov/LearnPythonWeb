@@ -78,16 +78,6 @@ progress = db.Table(
 )
 
 
-class SprintProgress(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    object_type = db.Column(db.Unicode(255))
-    object_id = db.Column(db.Integer)
-    object = generic_relationship(object_type, object_id)
-
-    def __repr__(self):
-        return '<SprintProgress %r>' % self.id
-
-
 class Content(db.Model):
     YOUTUBE, SLIDES, GITHUB = range(1, 4)
     CONTENT_TYPE = (
@@ -113,7 +103,7 @@ class Content(db.Model):
     description = db.Column(db.Text, nullable=True)
 
     def __repr__(self):
-        return "<Content %r>" % self.url
+        return "<Content %r>" % self.id
 
 
 class ContentModelView(ModelView):

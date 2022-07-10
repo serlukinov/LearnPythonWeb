@@ -6,7 +6,7 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 
 from app.db import db
-from app.lessons.models import Content, Lesson, Sprint, Track, ContentModelView
+from app.lessons.models import Content, Lesson, Sprint, Track, ContentModelView, progress
 from app.users.models import User
 
 from app.admins.views import blueprint as admin_blueprint
