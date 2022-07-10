@@ -1,11 +1,11 @@
 import os
 
 from app.db import db
-from sqlalchemy_utils import ChoiceType
-from markupsafe import Markup
 from flask_admin import form
 from flask_admin.contrib.sqla import ModelView
-from flask import current_app, url_for
+from flask import url_for
+from markupsafe import Markup
+from sqlalchemy_utils import ChoiceType, generic_relationship
 
 
 class Track(db.Model):
@@ -43,7 +43,7 @@ class Sprint(db.Model):
     )
 
     def github_reposit(self):
-        return Content.query.filter_by(sprint_id=self.id, type=Content.GITHUB)
+        return Content.query.filter_by(sprint_id=self.id)
 
     def __repr__(self):
         return "<Sprint %r>" % self.name
@@ -78,6 +78,16 @@ progress = db.Table(
 )
 
 
+class SprintProgress(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    object_type = db.Column(db.Unicode(255))
+    object_id = db.Column(db.Integer)
+    object = generic_relationship(object_type, object_id)
+
+    def __repr__(self):
+        return '<SprintProgress %r>' % self.id
+
+
 class Content(db.Model):
     YOUTUBE, SLIDES, GITHUB = range(1, 4)
     CONTENT_TYPE = (
@@ -100,6 +110,7 @@ class Content(db.Model):
     )
     type = db.Column(ChoiceType(CONTENT_TYPE, impl=db.Integer()))
     image = db.Column(db.Unicode(128), nullable=True)
+    description = db.Column(db.Text, nullable=True)
 
     def __repr__(self):
         return "<Content %r>" % self.url
@@ -111,16 +122,16 @@ class ContentModelView(ModelView):
             return ""
 
         filename = form.thumbgen_filename(model.path)
-        url = url_for("images", filename=filename)
+        url = url_for('static', filename=filename)
 
         return Markup(f'<img src="{url}">')
 
     column_formatters = {"path": _list_thumbnail}
 
     form_extra_fields = {
-        "image": form.ImageUploadField(
-            "Image",
-            base_path=os.path.join(os.path.dirname("app"), "/static/images"),
-            # thumbnail_size=(320, 320, True),
+        'image': form.ImageUploadField(
+            'Image',
+            base_path=os.path.join(os.path.dirname(__file__), '..', 'static'),
+            thumbnail_size=(120, 120, True),
         )
     }

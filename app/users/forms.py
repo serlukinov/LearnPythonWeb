@@ -1,6 +1,7 @@
 from app.users.models import User
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from flask_wtf.file import FileField, FileRequired
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 
 
@@ -60,6 +61,11 @@ class RegistrationForm(FlaskForm):
         "Отправить!", 
         render_kw={"class": "btn btn-primary"},
     )
+    avatar = FileField(
+        "Добавить аватарку",
+        validators=[FileRequired()],
+        render_kw={"class": "form-control"},
+        )
 
     def validate_username(self, username):
         user_count = User.query.filter_by(username=username.data).count()

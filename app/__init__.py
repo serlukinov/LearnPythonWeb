@@ -32,7 +32,6 @@ def create_app():
     admin.add_view(ModelView(Track, db.session))
     admin.add_view(ModelView(Sprint, db.session))
     admin.add_view(ModelView(Lesson, db.session))
-    # admin.add_view(ModelView(Content, db.session))
     admin.add_view(ModelView(User, db.session))
     admin.add_view(ContentModelView(Content, db.session))
 

@@ -20,7 +20,7 @@
             <h2 class="accordion-header" id="panelsStayOpen-heading{{ sprint.id }}">
               <button class="accordion-button {% if current_lesson not in sprint.lessons %}collapsed{% endif %}" 
               type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse{{ sprint.id }}" 
-              aria-expanded="true" aria-controls="panelsStayOpen-collapse{{ sprint.id }}">{{ sprint.name }}</button>
+              aria-expanded="true" aria-controls="panelsStayOpen-collapse{{ sprint.id }}">{{ sprint.name[:8] }}</button>
             </h2>
             <div id="panelsStayOpen-collapse{{ sprint.id }}" class="accordion-collapse collapse 
             {% if current_lesson in sprint.lessons %}show{% endif %}" 
@@ -42,7 +42,7 @@
         <div class="row row-cols-1">
           <div class="col">
             {% for content in current_lesson.lesson_video() %}
-              <iframe width="850" height="480"
+              <iframe width="840" height="450"
                 src="https://www.youtube.com/embed/{{ content.url }}" 
                 title="YouTube video player" frameborder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -56,6 +56,11 @@
             {{ current_lesson.sprint.description }}
             {% endif %}
           </div>
+
+
+          <a href="#" class="btn btn-dark">Продолжить!<span class="progress-button"></span></a>
+
+
           <div class="col">
             <h3>Дополнительные материалы!</h3>
             <div class="container">
@@ -63,6 +68,7 @@
                 {% for content in current_lesson.sprint.github_reposit() %}
                   <a href="{{ content.url }}">
                     <img src="{{ url_for('static', filename=thumbnail(content.image)) }}"></a>
+                    {{ content.description }}
                 {% endfor %}
               </div>
             </div>

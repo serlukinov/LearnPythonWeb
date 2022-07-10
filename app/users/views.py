@@ -1,12 +1,12 @@
-from flask import Blueprint, flash, render_template, redirect, url_for
-from flask_login import current_user, login_user, logout_user
+import os
 
 from app.db import db
 from app.users.forms import LoginForm, RegistrationForm
-
-from app.users.models import User
 # from app.utils import get_redirect_target
 from app.users.models import User
+from flask import Blueprint, flash, render_template, redirect, url_for
+from flask_login import current_user, login_user, logout_user
+from werkzeug.utils import secure_filename
 
 blueprint = Blueprint('users', __name__, url_prefix='/')
 
@@ -58,22 +58,28 @@ def register():
     return render_template('users/registration.html', page_title=title, form=form)
 
 
-@blueprint.route('/process-reg', methods=['POST', 'GET'])
+@blueprint.route('/process-reg', methods=['GET','POST'])
 def process_reg():
     form = RegistrationForm()
     if form.validate_on_submit():
+        avatar = form.avatar.data
+        filename = secure_filename(avatar.filename)
+        avatar.save(os.path.join(
+            os.path.abspath(os.path.dirname(__file__)), '..', 'static/avatars/', filename
+        ))
         news_user = User(
             username=form.username.data, 
             email=form.email.data, 
             role='user',
             first_name=form.first_name.data,
             last_name=form.last_name.data,
+            avatar='avatars/' + filename,
             )
         news_user.set_password(form.password.data)
         db.session.add(news_user)
         db.session.commit()
         flash('Вы успешно зарегистрировались!')
-        return  render_template('welcome_page.html')
+        return  redirect(url_for('users.login'))
     else:
         for field, errors in form.errors.items():
             for error in errors:
@@ -86,4 +92,5 @@ def process_reg():
 
 @blueprint.route("/promo")
 def promo():
-    return render_template('welcome_page.html')
+    avatar=current_user.avatar
+    return render_template('welcome_page.html', avatar=avatar)

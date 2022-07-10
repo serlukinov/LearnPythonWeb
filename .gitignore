@@ -186,3 +186,5 @@ Temporary Items
 
 # Ignore code-workspaces
 *.code-workspace
+
+/static

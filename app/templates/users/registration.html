@@ -4,7 +4,7 @@
 {% include('messages.html') %}
 <div class="row">
     <div class="col-lg-5 col-md-4 m-auto card p-4">
-        <form action="{{ url_for('users.process_reg') }}" method="POST">
+        <form action="{{ url_for('users.process_reg') }}" method="POST" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <div class="form-group">
                 {{ form.username.label }}
@@ -29,7 +29,11 @@
             <div class="form-group">
                 {{ form.password2.label }}
                 {{ form.password2() }}
-            </div>
+            </div><br>
+            <div class="form-group">
+                {{ form.avatar.label }}<br>
+                {{ form.avatar() }}
+            </div><br>
             {{ form.submit }}
         </form>
     </div>
