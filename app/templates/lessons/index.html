@@ -2,6 +2,12 @@
 
 {% block content %}
   <div class="container">
+    <h4 class="mt-3">total_lesson_content_number: {{ total_lesson_content_number }}</h4>
+    <h4 class="mt-3">Твой прогресс по спринту: </h4>
+    <h4 class="mt-3">completed_lesson_content_number: {{ completed_lesson_content_number }}</h4>
+    <div class="progress my-3">
+      <div class="progress-bar-striped bg-primary text-center text-white" role="progressbar" style="width: {{ sprint_progress }}%; line-height: 16px;" aria-valuenow="{{ sprint_progress }}" aria-valuemin="0" aria-valuemax="100">{{ sprint_progress }}%</div>
+    </div>
     <div class="row">
       <div class="btn-group me-2" role="group" aria-label="Second group">
         {% for track in tracks %}
@@ -13,7 +19,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-4">
+      <div class="col-4 mt-3">
         <div class="accordion" id="accordionPanelsStayOpenExample">
           {% for sprint in current_lesson.sprint.track.sprints %}
           <div class="accordion-item">
@@ -40,7 +46,7 @@
       </div>
       <div class="col-8">
         <div class="row row-cols-1">
-          <div class="col">
+          <div class="col mt-3">
             {% for content in current_lesson.lesson_video() %}
               <iframe width="840" height="450"
                 src="https://www.youtube.com/embed/{{ content.url }}" 
@@ -48,6 +54,7 @@
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                 allowfullscreen>
               </iframe>
+              <a href="#" class="complete-content btn btn-dark my-3" data-content="{{ content.id }}">Понятно!<span class="progress-button"></span></a>
             {% endfor %}
           </div>
           <div class="col">
@@ -56,10 +63,6 @@
             {{ current_lesson.sprint.description }}
             {% endif %}
           </div>
-
-
-          <a href="#" class="btn btn-dark">Продолжить!<span class="progress-button"></span></a>
-
 
           <div class="col">
             <h3>Дополнительные материалы!</h3>
@@ -77,4 +80,29 @@
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block script %}
+  {{ super() }}
+  <script>
+    $(document).ready(function() {
+      const completeContentButton = $('.complete-content');
+      completeContentButton.on('click', function(e) {
+        e.preventDefault();
+        const pk = $(this).data('content');
+        console.log(pk)
+        $.ajax({
+            url: `/lessons/progress/${pk}`,
+            method: 'POST',
+            {#data: JSON.stringify({'pk': pk}),#}
+            {#contentType: "application/json; charset=utf-8",#}
+            {#dataType: "json",#}
+            success: function (result) {
+              console.log(result)
+            }
+        });
+      })
+      console.log(completeContentButton)
+    });
+  </script>
 {% endblock %}
