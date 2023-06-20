@@ -2,9 +2,9 @@
 
 {% block content %}
   <div class="container">
-    <h4 class="mt-3">total_lesson_content_number: {{ total_lesson_content_number }}</h4>
+    <!-- <h4 class="mt-3">total_lesson_content_number: {{ total_lesson_content_number }}</h4>
     <h4 class="mt-3">Твой прогресс по спринту: </h4>
-    <h4 class="mt-3">completed_lesson_content_number: {{ completed_lesson_content_number }}</h4>
+    <h4 class="mt-3">completed_lesson_content_number: {{ completed_lesson_content_number }}</h4> -->
     <div class="progress my-3">
       <div class="progress-bar-striped bg-primary text-center text-white" role="progressbar" style="width: {{ sprint_progress }}%; line-height: 16px;" aria-valuenow="{{ sprint_progress }}" aria-valuemin="0" aria-valuemax="100">{{ sprint_progress }}%</div>
     </div>
